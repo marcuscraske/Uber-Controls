@@ -1,0 +1,18 @@
+Uber Controls
+============================================================================
+License:		Creative Commons Attribution-ShareAlike 3.0 unported
+Author(s):		limpygnome			limpygnome@gmail.com
+Version:		1.0.0
+
+Simple .NET control library with an extensive amount of customisable
+properties; this library is intended to be a more powerful set of
+controls than the ones provided with Microsoft Windows Forms.
+
+
+Change-log
+============================================================================
+v1.0.0:
+- Created Git repository.
+- Added controls:
+-- Button
+-- ProgressBar
