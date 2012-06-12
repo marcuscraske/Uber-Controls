@@ -9,7 +9,6 @@
  * -- none
  * 
  */
-
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -122,6 +121,8 @@ namespace UberLib.Controls
         #region "Cached values - used to decrease processing"
         private RectangleF cacheRenderFilled;
         private RectangleF cacheRenderEmpty;
+        private RectangleF cacheRenderSrcFilled;
+        private RectangleF cacheRenderSrcEmpty;
         private SolidBrush cacheRenderFilledColour;
         private SolidBrush cacheRenderEmptyColour;
         private string cacheText;
@@ -242,6 +243,7 @@ namespace UberLib.Controls
             set
             {
                 _Style_Image_Filled = value;
+                cacheRebuild_FilledEmptySize();
                 Invalidate();
             }
         }
@@ -257,6 +259,7 @@ namespace UberLib.Controls
             set
             {
                 _Style_Image_Empty = value;
+                cacheRebuild_FilledEmptySize();
                 Invalidate();
             }
         }
@@ -271,7 +274,7 @@ namespace UberLib.Controls
             }
             set
             {
-                if (value >= 0.0f || value <= 1.0f)
+                if (value >= 0.0f && value <= 1.0f)
                 {
                     _Value = value;
                     cacheRebuild_Text();
@@ -416,8 +419,8 @@ namespace UberLib.Controls
             // Draw bars
             e.Graphics.FillRectangle(new SolidBrush(_Style_Colour_Filled), cacheRenderFilled);
             e.Graphics.FillRectangle(new SolidBrush(_Style_Colour_Empty), cacheRenderEmpty);
-            if (_Style_Image_Filled != null) e.Graphics.DrawImage(_Style_Image_Filled, cacheRenderFilled);
-            if (_Style_Image_Empty != null) e.Graphics.DrawImage(_Style_Image_Empty, cacheRenderEmpty);
+            if (_Style_Image_Filled != null) e.Graphics.DrawImage(_Style_Image_Filled, cacheRenderFilled, cacheRenderSrcFilled, GraphicsUnit.Pixel);
+            if (_Style_Image_Empty != null) e.Graphics.DrawImage(_Style_Image_Empty, cacheRenderEmpty, cacheRenderSrcFilled, GraphicsUnit.Pixel);
             // Draw text background
             e.Graphics.FillRectangle(cacheTextBackgroundColour, cacheTextBackground);
             // Draw text
@@ -484,6 +487,7 @@ namespace UberLib.Controls
                         _Value = clamp(1 - (float)e.Y / (float)Height);
                         break;
                 }
+                cacheRebuild_FilledEmptySize();
                 Invalidate();
             }
         }
@@ -504,6 +508,20 @@ namespace UberLib.Controls
                     cacheRenderEmpty.Y = 0;
                     cacheRenderEmpty.Width = Width - cacheRenderFilled.Width;
                     cacheRenderEmpty.Height = Height;
+                    if (_Style_Image_Filled != null)
+                    {
+                        cacheRenderSrcFilled.X = 0;
+                        cacheRenderSrcFilled.Y = 0;
+                        cacheRenderSrcFilled.Width = _Style_Image_Filled.Width * _Value;
+                        cacheRenderSrcFilled.Height = _Style_Image_Filled.Height;
+                    }
+                    if (_Style_Image_Empty != null)
+                    {
+                        cacheRenderSrcEmpty.X = _Style_Image_Empty.Width * _Value;
+                        cacheRenderSrcEmpty.Y = 0;
+                        cacheRenderSrcEmpty.Width = _Style_Image_Empty.Width - cacheRenderSrcEmpty.X;
+                        cacheRenderSrcEmpty.Height = _Style_Image_Empty.Height;
+                    }
                     break;
                 case OrientationType.RightToLeft:
                     cacheRenderFilled.Width = (int)((float)Width * _Value);
@@ -514,6 +532,20 @@ namespace UberLib.Controls
                     cacheRenderEmpty.Y = 0;
                     cacheRenderEmpty.Width = Width - cacheRenderFilled.Width;
                     cacheRenderEmpty.Height = Height;
+                    if (_Style_Image_Filled != null)
+                    {
+                        cacheRenderSrcFilled.X = _Style_Image_Empty.Width * _Value;
+                        cacheRenderSrcFilled.Y = 0;
+                        cacheRenderSrcFilled.Width = _Style_Image_Filled.Width - cacheRenderSrcEmpty.X;
+                        cacheRenderSrcFilled.Height = _Style_Image_Filled.Height;
+                    }
+                    if (_Style_Image_Empty != null)
+                    {
+                        cacheRenderSrcEmpty.X = 0;
+                        cacheRenderSrcEmpty.Y = 0;
+                        cacheRenderSrcEmpty.Width = _Style_Image_Empty.Width * _Value;
+                        cacheRenderSrcEmpty.Height = _Style_Image_Empty.Height;
+                    }
                     break;
                 case OrientationType.TopToBottom:
                     cacheRenderFilled.Height = (int)((float)Height * _Value);
@@ -524,6 +556,20 @@ namespace UberLib.Controls
                     cacheRenderEmpty.Y = Height - (Height - cacheRenderFilled.Height);
                     cacheRenderEmpty.Width = Width;
                     cacheRenderEmpty.Height = Height - cacheRenderFilled.Height;
+                    if (_Style_Image_Filled != null)
+                    {
+                        cacheRenderSrcFilled.X = 0;
+                        cacheRenderSrcFilled.Y = 0;
+                        cacheRenderSrcFilled.Width = _Style_Image_Filled.Width;
+                        cacheRenderSrcFilled.Height = _Style_Image_Filled.Height * _Value;
+                    }
+                    if (_Style_Image_Empty != null)
+                    {
+                        cacheRenderSrcEmpty.X = 0;
+                        cacheRenderSrcEmpty.Y = _Style_Image_Empty.Height * _Value;
+                        cacheRenderSrcEmpty.Width = _Style_Image_Empty.Width;
+                        cacheRenderSrcEmpty.Height = _Style_Image_Empty.Height - cacheRenderSrcEmpty.Y;
+                    }
                     break;
                 case OrientationType.BottomToTop:
                     cacheRenderFilled.Height = (int)((float)Height * _Value);
@@ -534,6 +580,20 @@ namespace UberLib.Controls
                     cacheRenderEmpty.Y = 0;
                     cacheRenderEmpty.Width = Width;
                     cacheRenderEmpty.Height = Height - cacheRenderFilled.Height;
+                    if (_Style_Image_Filled != null)
+                    {
+                        cacheRenderSrcFilled.X = 0;
+                        cacheRenderSrcFilled.Y = _Style_Image_Filled.Height * (1 - _Value);
+                        cacheRenderSrcFilled.Width = _Style_Image_Filled.Width;
+                        cacheRenderSrcFilled.Height = _Style_Image_Filled.Height * _Value;
+                    }
+                    if (_Style_Image_Empty != null)
+                    {
+                        cacheRenderSrcEmpty.X = 0;
+                        cacheRenderSrcEmpty.Y = _Style_Image_Empty.Height * _Value;
+                        cacheRenderSrcEmpty.Width = _Style_Image_Empty.Width;
+                        cacheRenderSrcEmpty.Height = _Style_Image_Empty.Height - cacheRenderSrcEmpty.Y;
+                    }
                     break;
             }
         }
@@ -547,7 +607,7 @@ namespace UberLib.Controls
         }
         private void cacheRebuild_Text()
         {
-            cacheText = Math.Round((_Value / 1.0f) * 100.0f, 2).ToString() + "%";
+            cacheText = (_Value * 100).ToString("0.00") + "%";
         }
         private void cacheRebuild_TextnTextBackgroundPositionSize()
         {

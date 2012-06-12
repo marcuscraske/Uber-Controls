@@ -17,7 +17,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -30,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -88,6 +89,18 @@
     <Compile Include="Button.Designer.cs">
       <DependentUpon>Button.cs</DependentUpon>
     </Compile>
+    <Compile Include="Checkbox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Checkbox.Designer.cs">
+      <DependentUpon>Checkbox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Header.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Header.Designer.cs">
+      <DependentUpon>Header.cs</DependentUpon>
+    </Compile>
     <Compile Include="ProgressBar.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -95,13 +108,28 @@
       <DependentUpon>ProgressBar.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scrollbar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Scrollbar.Designer.cs">
+      <DependentUpon>Scrollbar.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Button.resx">
       <DependentUpon>Button.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Checkbox.resx">
+      <DependentUpon>Checkbox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Header.resx">
+      <DependentUpon>Header.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ProgressBar.resx">
       <DependentUpon>ProgressBar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scrollbar.resx">
+      <DependentUpon>Scrollbar.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
