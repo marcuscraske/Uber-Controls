@@ -78,6 +78,7 @@ namespace UberLib.Controls
             }
             set
             {
+                trackerImage = value;
                 rebuildCache_Rendering();
                 Invalidate();
             }
@@ -90,6 +91,7 @@ namespace UberLib.Controls
             }
             set
             {
+                trackerSize = value;
                 rebuildCache_Rendering();
                 Invalidate();
             }
@@ -102,6 +104,7 @@ namespace UberLib.Controls
             }
             set
             {
+                mode = value;
                 rebuildCache_Rendering();
                 Invalidate();
             }
