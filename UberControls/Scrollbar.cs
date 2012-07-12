@@ -175,7 +175,15 @@ namespace UberLib.Controls
         }
         void eventMouseDown(MouseEventArgs e)
         {
-            cacheValue = (float)(e.X - (trackerSize / 2)) / ((float)Width - (trackerSize));
+            switch (mode)
+            {
+                case ScrollbarMode.Horizontal:
+                    cacheValue = (float)(e.X - (trackerSize / 2)) / ((float)Width - (trackerSize));
+                    break;
+                case ScrollbarMode.Vertical:
+                    cacheValue = (float)(e.Y - (trackerSize / 2)) / ((float)Height - (trackerSize));
+                    break;
+            }
             if (cacheValue < 0) cacheValue = 0;
             else if (cacheValue > 1) cacheValue = 1;
             Invalidate();
